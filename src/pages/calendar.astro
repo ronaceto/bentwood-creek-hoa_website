@@ -1,0 +1,145 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+
+// Sample calendar events (in a real app, this would come from a database or CMS)
+const events = [
+  {
+    title: "HOA Board Meeting",
+    date: "May 15, 2025",
+    time: "7:00 PM - 8:30 PM",
+    location: "Community Clubhouse",
+    description: "Monthly board meeting to discuss community matters."
+  },
+  {
+    title: "Trash & Recycling Pickup",
+    date: "Every Tuesday",
+    time: "Morning",
+    location: "Neighborhood-wide",
+    description: "Regular weekly trash and recycling collection."
+  },
+  {
+    title: "Spring Cleanup Day",
+    date: "April 10, 2025",
+    time: "9:00 AM - 12:00 PM",
+    location: "Meet at Community Park",
+    description: "Volunteer event to clean up common areas."
+  },
+  {
+    title: "Community Yard Sale",
+    date: "June 5-6, 2025",
+    time: "8:00 AM - 2:00 PM",
+    location: "Neighborhood-wide",
+    description: "Annual community-wide yard sale event."
+  },
+  {
+    title: "Pool Opening Day",
+    date: "May 1, 2025",
+    time: "10:00 AM",
+    location: "Community Pool",
+    description: "Seasonal opening of the community pool."
+  },
+  {
+    title: "Architectural Review Committee Meeting",
+    date: "April 20, 2025",
+    time: "6:30 PM - 7:30 PM",
+    location: "Community Clubhouse",
+    description: "Review of homeowner improvement requests."
+  }
+];
+
+// Group events by month
+const eventsByMonth: Record<string, typeof events> = {};
+events.forEach(event => {
+  // Handle "Every X" recurring events
+  if (event.date.startsWith("Every")) {
+    if (!eventsByMonth["Recurring"]) {
+      eventsByMonth["Recurring"] = [];
+    }
+    eventsByMonth["Recurring"].push(event);
+    return;
+  }
+  
+  // Regular events with specific dates
+  const date = new Date(event.date);
+  const monthYear = date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  
+  if (!eventsByMonth[monthYear]) {
+    eventsByMonth[monthYear] = [];
+  }
+  eventsByMonth[monthYear].push(event);
+});
+
+// Sort months chronologically
+const sortedMonths = Object.keys(eventsByMonth).sort((a, b) => {
+  if (a === "Recurring") return -1;
+  if (b === "Recurring") return 1;
+  return new Date(a) > new Date(b) ? 1 : -1;
+});
+---
+
+<Layout title="Community Calendar">
+  <Hero 
+    title="Community Calendar" 
+    subtitle="Stay informed about upcoming events and important dates"
+  />
+  
+  <div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-8">
+        <p class="text-lg text-gray-600">
+          Below you'll find our community calendar with upcoming events, meetings, and important dates.
+          For any questions about events, please <a href="/contact" class="text-primary hover:underline">contact the HOA board</a>.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <div class="bg-white rounded-lg shadow-md p-6">
+          <h2 class="text-2xl font-bold text-gray-800 mb-6">Google Calendar</h2>
+          <div class="aspect-w-16 aspect-h-9">
+            <div class="border rounded-lg p-4 bg-gray-50 text-center">
+              <p class="text-gray-600 mb-4">
+                You can view our full calendar and add it to your own Google Calendar using the link below:
+              </p>
+              <a 
+                href="#" 
+                class="inline-flex items-center px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Add to Google Calendar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Upcoming Events</h2>
+        
+        {sortedMonths.map(month => (
+          <div class="mb-10">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">{month}</h3>
+            <div class="space-y-6">
+              {eventsByMonth[month].map(event => (
+                <div class="bg-white rounded-lg shadow-sm border p-5">
+                  <h4 class="text-lg font-semibold text-gray-800 mb-2">{event.title}</h4>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <p class="text-sm text-gray-500 mb-1"><span class="font-medium">Date:</span> {event.date}</p>
+                      <p class="text-sm text-gray-500 mb-1"><span class="font-medium">Time:</span> {event.time}</p>
+                      <p class="text-sm text-gray-500"><span class="font-medium">Location:</span> {event.location}</p>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-600">{event.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>

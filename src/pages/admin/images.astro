@@ -1,0 +1,87 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { requireAuth } from '../../utils/auth';
+import ImageUploader from '../../components/ImageUploader.astro';
+
+// Check authentication
+const user = requireAuth(Astro.request);
+if (user instanceof Response) {
+  return user;
+}
+---
+
+<AdminLayout title="Manage Images">
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Manage Images</h1>
+    <p class="text-gray-600">Upload and manage images for your website.</p>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <ImageUploader />
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Current Images</h2>
+      
+      <div class="space-y-4">
+        <p class="text-gray-600 italic">
+          This is a demo component. In a real application, this would display a list of uploaded images.
+        </p>
+        
+        <div class="border rounded-lg p-4">
+          <div class="flex items-center">
+            <div class="w-16 h-16 bg-gray-200 rounded overflow-hidden mr-4">
+              <img src="/images/bentwood-entrance.jpg" alt="Bentwood Entrance" class="w-full h-full object-cover" />
+            </div>
+            <div class="flex-1">
+              <h3 class="text-sm font-medium">bentwood-entrance.jpg</h3>
+              <p class="text-xs text-gray-500">Added: January 15, 2025</p>
+              <p class="text-xs text-gray-500 mt-1">URL: <code class="bg-gray-100 px-1 py-0.5 rounded">/images/bentwood-entrance.jpg</code></p>
+            </div>
+            <div>
+              <button class="text-red-500 hover:text-red-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold mb-4">Using Images in Your Website</h2>
+    
+    <div class="space-y-4">
+      <div>
+        <h3 class="text-lg font-medium mb-2">Background Images</h3>
+        <p class="text-gray-600">
+          To use an image as a page background, add the <code class="bg-gray-100 px-1 py-0.5 rounded">backgroundImage</code> 
+          prop to the Layout component:
+        </p>
+        <pre class="bg-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm">
+&lt;Layout 
+  title="Home"
+  backgroundImage="/images/your-image.jpg"
+&gt;
+  ...
+&lt;/Layout&gt;</pre>
+      </div>
+      
+      <div>
+        <h3 class="text-lg font-medium mb-2">Hero Images</h3>
+        <p class="text-gray-600">
+          To use a custom image in the Hero component, use the <code class="bg-gray-100 px-1 py-0.5 rounded">imageUrl</code> prop:
+        </p>
+        <pre class="bg-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm">
+&lt;Hero 
+  title="Welcome" 
+  subtitle="Your subtitle here"
+  imageUrl="/images/your-image.jpg"
+  overlayOpacity={0.7}
+/&gt;</pre>
+      </div>
+    </div>
+  </div>
+</AdminLayout>

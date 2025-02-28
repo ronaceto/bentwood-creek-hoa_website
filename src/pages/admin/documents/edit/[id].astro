@@ -1,0 +1,183 @@
+---
+import AdminLayout from '../../../../layouts/AdminLayout.astro';
+import { requireAuth } from '../../../../utils/auth';
+import { getDocumentById, getAllDocuments, getDocumentPaths } from '../../../../data/documents';
+
+// Generate static paths for build
+export function getStaticPaths() {
+  return getDocumentPaths();
+}
+
+// Check authentication
+const user = requireAuth(Astro.request);
+if (user instanceof Response) {
+  return user;
+}
+
+// Get document ID from URL
+const { id } = Astro.params;
+if (!id) {
+  return Astro.redirect('/admin/documents');
+}
+
+// Get document data
+const document = getDocumentById(id);
+if (!document) {
+  return Astro.redirect('/admin/documents');
+}
+
+// Get all unique categories from existing documents
+const documents = getAllDocuments();
+const categories = [...new Set(documents.map(doc => doc.category))];
+---
+
+<AdminLayout title="Edit Document">
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Edit Document</h1>
+    <p class="text-gray-600">Update document information.</p>
+  </div>
+  
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <form action="/api/documents/update" method="post" class="space-y-6">
+      <input type="hidden" name="id" value={document.id} />
+      
+      <div>
+        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Document Title</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          value={document.title} 
+          required 
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+        />
+      </div>
+      
+      <div>
+        <label for="description" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+        <textarea 
+          id="description" 
+          name="description" 
+          rows="3" 
+          required 
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+        >{document.description}</textarea>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+          <div class="relative">
+            <select 
+              id="category" 
+              name="category" 
+              required 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary appearance-none"
+            >
+              {categories.map(category => (
+                <option value={category} selected={category === document.category}>{category}</option>
+              ))}
+              <option value="new">+ Add New Category</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        
+        <div id="newCategoryContainer" class="hidden">
+          <label for="newCategory" class="block text-sm font-medium text-gray-700 mb-1">New Category Name</label>
+          <input 
+            type="text" 
+            id="newCategory" 
+            name="newCategory" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+          />
+        </div>
+        
+        <div>
+          <label for="fileType" class="block text-sm font-medium text-gray-700 mb-1">File Type</label>
+          <div class="relative">
+            <select 
+              id="fileType" 
+              name="fileType" 
+              required 
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary appearance-none"
+            >
+              <option value="pdf" selected={document.fileType === 'pdf'}>PDF</option>
+              <option value="doc" selected={document.fileType === 'doc'}>DOC</option>
+              <option value="docx" selected={document.fileType === 'docx'}>DOCX</option>
+              <option value="xls" selected={document.fileType === 'xls'}>XLS</option>
+              <option value="xlsx" selected={document.fileType === 'xlsx'}>XLSX</option>
+              <option value="txt" selected={document.fileType === 'txt'}>TXT</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div>
+        <label for="file" class="block text-sm font-medium text-gray-700 mb-1">Replace Document (Optional)</label>
+        <input 
+          type="file" 
+          id="file" 
+          name="file" 
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+        />
+        <p class="text-xs text-gray-500 mt-1">Leave empty to keep the current file.</p>
+      </div>
+      
+      <div>
+        <label for="downloadUrl" class="block text-sm font-medium text-gray-700 mb-1">Download URL</label>
+        <input 
+          type="text" 
+          id="downloadUrl" 
+          name="downloadUrl" 
+          value={document.downloadUrl} 
+          required 
+          class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+        />
+      </div>
+      
+      <div class="flex justify-end space-x-4">
+        <a 
+          href="/admin/documents" 
+          class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition"
+        >
+          Cancel
+        </a>
+        <button 
+          type="submit" 
+          class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition"
+        >
+          Update Document
+        </button>
+      </div>
+    </form>
+  </div>
+</AdminLayout>
+
+<script>
+  // Show/hide new category input based on selection
+  const categorySelect = document.getElementById('category');
+  const newCategoryContainer = document.getElementById('newCategoryContainer');
+  const newCategoryInput = document.getElementById('newCategory');
+  
+  if (categorySelect && newCategoryContainer && newCategoryInput) {
+    categorySelect.addEventListener('change', function() {
+      if (this.value === 'new') {
+        newCategoryContainer.classList.remove('hidden');
+        newCategoryInput.setAttribute('required', 'required');
+      } else {
+        newCategoryContainer.classList.add('hidden');
+        newCategoryInput.removeAttribute('required');
+      }
+    });
+  }
+</script>

@@ -1,0 +1,95 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  backgroundImage?: string;
+}
+
+const { 
+  title, 
+  description = "Bentwood Creek Neighborhood HOA website in Collierville, Tennessee",
+  backgroundImage
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={description} />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>{title} | Bentwood Creek HOA</title>
+    <style define:vars={{ backgroundImage: backgroundImage ? `url(${backgroundImage})` : 'none' }}>
+      body {
+        background-image: var(--backgroundImage);
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+      }
+      
+      body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.92);
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body class="min-h-screen flex flex-col bg-gray-50">
+    <header class="bg-white shadow-sm">
+      <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+        <a href="/" class="text-2xl font-bold text-primary mb-4 md:mb-0">Bentwood Creek</a>
+        <nav>
+          <ul class="flex flex-wrap gap-2 md:gap-6 text-sm md:text-base">
+            <li><a href="/" class="text-gray-700 hover:text-primary transition">Home</a></li>
+            <li><a href="/announcements" class="text-gray-700 hover:text-primary transition">Announcements</a></li>
+            <li><a href="/calendar" class="text-gray-700 hover:text-primary transition">Calendar</a></li>
+            <li><a href="/documents" class="text-gray-700 hover:text-primary transition">Documents</a></li>
+            <li><a href="/contact" class="text-gray-700 hover:text-primary transition">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    
+    <main class="flex-grow">
+      <slot />
+    </main>
+    
+    <footer class="bg-primary text-white py-8 mt-12">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div>
+            <h3 class="text-xl font-semibold mb-4">Bentwood Creek HOA</h3>
+            <p class="text-gray-200">Collierville, Tennessee</p>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold mb-4">Quick Links</h3>
+            <ul class="space-y-2">
+              <li><a href="/" class="text-gray-200 hover:text-white transition">Home</a></li>
+              <li><a href="/announcements" class="text-gray-200 hover:text-white transition">Announcements</a></li>
+              <li><a href="/calendar" class="text-gray-200 hover:text-white transition">Calendar</a></li>
+              <li><a href="/documents" class="text-gray-200 hover:text-white transition">Documents</a></li>
+              <li><a href="/contact" class="text-gray-200 hover:text-white transition">Contact</a></li>
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xl font-semibold mb-4">Contact</h3>
+            <p class="text-gray-200">For urgent matters, please use our <a href="/contact" class="underline hover:text-white">contact form</a>.</p>
+          </div>
+        </div>
+        <div class="border-t border-gray-600 mt-8 pt-6 text-center text-gray-300">
+          <p>&copy; {new Date().getFullYear()} Bentwood Creek Neighborhood HOA. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

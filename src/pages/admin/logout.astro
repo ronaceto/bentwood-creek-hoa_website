@@ -1,0 +1,5 @@
+---
+// Clear the authentication cookie and redirect to login page
+Astro.response.headers.set('Set-Cookie', 'token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT');
+return Astro.redirect('/admin/login');
+---

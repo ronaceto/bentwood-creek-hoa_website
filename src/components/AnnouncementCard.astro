@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  date: string;
+  excerpt: string;
+  url: string;
+  isHighlighted?: boolean;
+}
+
+const { title, date, excerpt, url, isHighlighted = false } = Astro.props;
+---
+
+<div class={`bg-white rounded-lg shadow-md overflow-hidden ${isHighlighted ? 'border-2 border-primary' : ''}`}>
+  <div class="p-6">
+    {isHighlighted && <span class="inline-block bg-primary text-white text-xs px-2 py-1 rounded mb-3">Important</span>}
+    <h3 class="text-xl font-semibold mb-2">
+      <a href={url} class="text-gray-800 hover:text-primary transition">{title}</a>
+    </h3>
+    <p class="text-sm text-gray-500 mb-3">{date}</p>
+    <p class="text-gray-600 mb-4">{excerpt}</p>
+    <a href={url} class="text-primary hover:text-primary-dark font-medium transition">Read more →</a>
+  </div>
+</div>

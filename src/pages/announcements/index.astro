@@ -1,0 +1,74 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Hero from '../../components/Hero.astro';
+import AnnouncementCard from '../../components/AnnouncementCard.astro';
+
+// Sample announcements data (in a real app, this would come from a database or CMS)
+const announcements = [
+  {
+    title: "Annual HOA Meeting",
+    date: "May 15, 2025",
+    excerpt: "Join us for our annual HOA meeting where we'll discuss the budget, upcoming projects, and elect new board members.",
+    url: "/announcements/annual-hoa-meeting",
+    isHighlighted: true
+  },
+  {
+    title: "Spring Cleanup Day",
+    date: "April 10, 2025",
+    excerpt: "Volunteers needed for our neighborhood spring cleanup day. Refreshments will be provided.",
+    url: "/announcements/spring-cleanup-day",
+    isHighlighted: false
+  },
+  {
+    title: "New Playground Equipment",
+    date: "March 28, 2025",
+    excerpt: "We're excited to announce that new playground equipment will be installed in the community park next month.",
+    url: "/announcements/new-playground-equipment",
+    isHighlighted: false
+  },
+  {
+    title: "Holiday Decorating Contest",
+    date: "March 15, 2025",
+    excerpt: "Get ready for our annual holiday decorating contest! Prizes will be awarded for the most creative displays.",
+    url: "/announcements/holiday-decorating-contest",
+    isHighlighted: false
+  },
+  {
+    title: "Pool Opening Date",
+    date: "March 5, 2025",
+    excerpt: "The community pool will open on May 1st. Please make sure your HOA dues are current to receive your access card.",
+    url: "/announcements/pool-opening-date",
+    isHighlighted: false
+  },
+  {
+    title: "New Landscaping Service",
+    date: "February 20, 2025",
+    excerpt: "We've contracted with a new landscaping service for the common areas. Please let us know if you have any feedback.",
+    url: "/announcements/new-landscaping-service",
+    isHighlighted: false
+  }
+];
+---
+
+<Layout title="Announcements & Alerts">
+  <Hero 
+    title="Announcements & Alerts" 
+    subtitle="Stay updated with the latest news and information from Bentwood Creek"
+  />
+  
+  <div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <div class="grid grid-cols-1 gap-8">
+        {announcements.map(announcement => (
+          <AnnouncementCard 
+            title={announcement.title}
+            date={announcement.date}
+            excerpt={announcement.excerpt}
+            url={announcement.url}
+            isHighlighted={announcement.isHighlighted}
+          />
+        ))}
+      </div>
+    </div>
+  </div>
+</Layout>

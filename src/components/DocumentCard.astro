@@ -1,0 +1,42 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  fileType: string;
+  downloadUrl: string;
+  date: string;
+}
+
+const { title, description, fileType, downloadUrl, date } = Astro.props;
+
+// Map file types to icons (using emoji as placeholders)
+const fileIcons: Record<string, string> = {
+  pdf: "📄",
+  doc: "📝",
+  docx: "📝",
+  xls: "📊",
+  xlsx: "📊",
+  txt: "📃",
+  default: "📁"
+};
+
+const icon = fileIcons[fileType.toLowerCase()] || fileIcons.default;
+---
+
+<div class="bg-white rounded-lg shadow-md p-6">
+  <div class="flex items-start">
+    <div class="text-3xl mr-4">{icon}</div>
+    <div class="flex-1">
+      <h3 class="text-lg font-semibold mb-1">{title}</h3>
+      <p class="text-sm text-gray-500 mb-2">Updated: {date}</p>
+      <p class="text-gray-600 mb-4">{description}</p>
+      <a 
+        href={downloadUrl} 
+        class="inline-flex items-center px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition"
+        download
+      >
+        Download
+      </a>
+    </div>
+  </div>
+</div>

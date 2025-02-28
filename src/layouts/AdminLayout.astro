@@ -1,0 +1,67 @@
+---
+import { isAuthenticated } from '../utils/auth';
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const user = isAuthenticated(Astro.request);
+
+// Redirect to login if not authenticated
+if (!user && Astro.url.pathname !== '/admin/login') {
+  console.log('User not authenticated, redirecting to login');
+  return Astro.redirect('/admin/login');
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>{title} | Admin Dashboard</title>
+  </head>
+  <body class="min-h-screen flex flex-col bg-gray-50">
+    <header class="bg-primary text-white shadow-md">
+      <div class="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+        <div class="flex items-center mb-4 md:mb-0">
+          <a href="/admin" class="text-2xl font-bold">Bentwood Creek Admin</a>
+        </div>
+        {user && (
+          <div class="flex items-center space-x-6">
+            <nav>
+              <ul class="flex flex-wrap space-x-4 md:space-x-6 text-sm md:text-base">
+                <li><a href="/admin" class="text-white hover:text-gray-200 transition">Dashboard</a></li>
+                <li><a href="/admin/documents" class="text-white hover:text-gray-200 transition">Documents</a></li>
+                <li><a href="/admin/announcements" class="text-white hover:text-gray-200 transition">Announcements</a></li>
+                <li><a href="/admin/calendar" class="text-white hover:text-gray-200 transition">Calendar</a></li>
+                <li><a href="/admin/images" class="text-white hover:text-gray-200 transition">Images</a></li>
+                <li><a href="/admin/github" class="text-white hover:text-gray-200 transition">GitHub</a></li>
+              </ul>
+            </nav>
+            <div class="flex items-center">
+              <span class="text-sm mr-4">Welcome, {user.username}</span>
+              <a href="/admin/logout" class="bg-white text-primary px-3 py-1 rounded text-sm hover:bg-gray-100 transition">Logout</a>
+            </div>
+          </div>
+        )}
+      </div>
+    </header>
+    
+    <main class="flex-grow container mx-auto px-4 py-8">
+      <slot />
+    </main>
+    
+    <footer class="bg-gray-800 text-white py-4">
+      <div class="container mx-auto px-4 text-center text-sm">
+        <p>&copy; {new Date().getFullYear()} Bentwood Creek HOA Admin Panel</p>
+      </div>
+    </footer>
+  </body>
+</html>

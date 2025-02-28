@@ -1,0 +1,107 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import AnnouncementCard from '../components/AnnouncementCard.astro';
+
+// Sample announcements data (in a real app, this would come from a database or CMS)
+const announcements = [
+  {
+    title: "Annual HOA Meeting",
+    date: "May 15, 2025",
+    excerpt: "Join us for our annual HOA meeting where we'll discuss the budget, upcoming projects, and elect new board members.",
+    url: "/announcements/annual-hoa-meeting",
+    isHighlighted: true
+  },
+  {
+    title: "Spring Cleanup Day",
+    date: "April 10, 2025",
+    excerpt: "Volunteers needed for our neighborhood spring cleanup day. Refreshments will be provided.",
+    url: "/announcements/spring-cleanup-day",
+    isHighlighted: false
+  },
+  {
+    title: "New Playground Equipment",
+    date: "March 28, 2025",
+    excerpt: "We're excited to announce that new playground equipment will be installed in the community park next month.",
+    url: "/announcements/new-playground-equipment",
+    isHighlighted: false
+  }
+];
+---
+
+<Layout 
+  title="Home"
+  backgroundImage="/images/bentwood-entrance.jpg"
+>
+  <Hero 
+    title="Welcome to Bentwood Creek" 
+    subtitle="A beautiful community in Collierville, Tennessee"
+    overlayOpacity={0.7}
+  />
+  
+  <div class="container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-12 text-center">
+        <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Neighborhood</h2>
+        <p class="text-lg text-gray-600">
+          Bentwood Creek is a charming neighborhood located in Collierville, Tennessee. 
+          Our community features beautiful homes, friendly neighbors, and well-maintained common areas.
+          The HOA is committed to preserving property values and enhancing the quality of life for all residents.
+        </p>
+      </div>
+      
+      <div class="mb-12">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-800">Recent Announcements</h2>
+          <a href="/announcements" class="text-primary hover:text-primary-dark font-medium transition">View all →</a>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {announcements.map(announcement => (
+            <AnnouncementCard 
+              title={announcement.title}
+              date={announcement.date}
+              excerpt={announcement.excerpt}
+              url={announcement.url}
+              isHighlighted={announcement.isHighlighted}
+            />
+          ))}
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Quick Links</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <a href="/calendar" class="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition">
+            <span class="text-2xl mr-3">📅</span>
+            <div>
+              <h3 class="font-medium text-gray-800">Community Calendar</h3>
+              <p class="text-sm text-gray-600">View upcoming events and meetings</p>
+            </div>
+          </a>
+          <a href="/documents" class="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition">
+            <span class="text-2xl mr-3">📄</span>
+            <div>
+              <h3 class="font-medium text-gray-800">HOA Documents</h3>
+              <p class="text-sm text-gray-600">Access bylaws, guidelines, and forms</p>
+            </div>
+          </a>
+          <a href="/contact" class="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition">
+            <span class="text-2xl mr-3">✉️</span>
+            <div>
+              <h3 class="font-medium text-gray-800">Contact Us</h3>
+              <p class="text-sm text-gray-600">Get in touch with the HOA board</p>
+            </div>
+          </a>
+          <a href="/announcements" class="flex items-center p-4 border rounded-lg hover:bg-gray-50 transition">
+            <span class="text-2xl mr-3">📢</span>
+            <div>
+              <h3 class="font-medium text-gray-800">Announcements</h3>
+              <p class="text-sm text-gray-600">Stay updated with neighborhood news</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</Layout>

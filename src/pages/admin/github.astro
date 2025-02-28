@@ -1,0 +1,138 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { requireAuth } from '../../utils/auth';
+
+// Check authentication
+const user = requireAuth(Astro.request);
+if (user instanceof Response) {
+  return user;
+}
+---
+
+<AdminLayout title="GitHub Integration">
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">GitHub Integration</h1>
+    <p class="text-gray-600">Manage your website content through GitHub.</p>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Setup Instructions</h2>
+      <p class="text-gray-600 mb-4">
+        Follow these steps to connect your website to GitHub and manage your images and other content.
+      </p>
+      
+      <ol class="list-decimal list-inside space-y-3 text-gray-700">
+        <li>
+          <span class="font-medium">Create a GitHub repository</span>
+          <p class="ml-6 text-sm text-gray-600">Go to GitHub and create a new repository for your website.</p>
+        </li>
+        <li>
+          <span class="font-medium">Initialize Git in your project</span>
+          <p class="ml-6 text-sm text-gray-600">Run <code class="bg-gray-100 px-1 py-0.5 rounded">git init</code> in your project directory.</p>
+        </li>
+        <li>
+          <span class="font-medium">Add your files</span>
+          <p class="ml-6 text-sm text-gray-600">Run <code class="bg-gray-100 px-1 py-0.5 rounded">git add .</code> to stage all files.</p>
+        </li>
+        <li>
+          <span class="font-medium">Commit your changes</span>
+          <p class="ml-6 text-sm text-gray-600">Run <code class="bg-gray-100 px-1 py-0.5 rounded">git commit -m "Initial commit"</code>.</p>
+        </li>
+        <li>
+          <span class="font-medium">Connect to GitHub</span>
+          <p class="ml-6 text-sm text-gray-600">Run <code class="bg-gray-100 px-1 py-0.5 rounded">git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git</code>.</p>
+        </li>
+        <li>
+          <span class="font-medium">Push your code</span>
+          <p class="ml-6 text-sm text-gray-600">Run <code class="bg-gray-100 px-1 py-0.5 rounded">git push -u origin main</code>.</p>
+        </li>
+      </ol>
+      
+      <div class="mt-6">
+        <a href="/github-setup" class="text-primary hover:underline" target="_blank">View detailed setup guide →</a>
+      </div>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold mb-4">Managing Images with GitHub</h2>
+      
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-lg font-medium mb-2">Upload Images</h3>
+          <p class="text-gray-600">
+            You can upload images directly through the GitHub web interface:
+          </p>
+          <ol class="list-decimal list-inside mt-2 text-sm text-gray-600">
+            <li>Navigate to your repository on GitHub</li>
+            <li>Go to the <code class="bg-gray-100 px-1 py-0.5 rounded">public/images</code> directory</li>
+            <li>Click "Add file" > "Upload files"</li>
+            <li>Drag and drop your images</li>
+            <li>Add a commit message and click "Commit changes"</li>
+          </ol>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-medium mb-2">Pull Images to Your Project</h3>
+          <p class="text-gray-600">
+            After uploading images to GitHub, pull them to your development environment:
+          </p>
+          <pre class="bg-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm">git pull origin main</pre>
+        </div>
+        
+        <div>
+          <h3 class="text-lg font-medium mb-2">Use Images in Your Website</h3>
+          <p class="text-gray-600">
+            Once pulled, you can use the images in your components:
+          </p>
+          <pre class="bg-gray-100 p-3 rounded-lg mt-2 overflow-x-auto text-sm">
+&lt;Hero 
+  title="Welcome" 
+  imageUrl="/images/your-new-image.jpg" 
+  overlayOpacity={0.7}
+/&gt;</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="mt-8 bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold mb-4">GitHub Workflow</h2>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="border rounded-lg p-4">
+        <h3 class="font-medium text-lg mb-2">1. Make Changes</h3>
+        <p class="text-gray-600 text-sm">
+          Edit your website files, add new images, or update content.
+        </p>
+      </div>
+      
+      <div class="border rounded-lg p-4">
+        <h3 class="font-medium text-lg mb-2">2. Commit Changes</h3>
+        <pre class="bg-gray-100 p-2 rounded-lg mt-2 overflow-x-auto text-xs">
+git add .
+git commit -m "Description of changes"</pre>
+      </div>
+      
+      <div class="border rounded-lg p-4">
+        <h3 class="font-medium text-lg mb-2">3. Push to GitHub</h3>
+        <pre class="bg-gray-100 p-2 rounded-lg mt-2 overflow-x-auto text-xs">
+git push origin main</pre>
+        <p class="text-gray-600 text-xs mt-2">
+          This uploads your changes to GitHub.
+        </p>
+      </div>
+    </div>
+    
+    <div class="mt-6 text-center">
+      <a 
+        href="https://github.com/new" 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="inline-flex items-center px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition"
+      >
+        Create GitHub Repository
+      </a>
+    </div>
+  </div>
+</AdminLayout>

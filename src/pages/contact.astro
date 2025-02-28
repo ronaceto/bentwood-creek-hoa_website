@@ -1,0 +1,45 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ContactForm from '../components/ContactForm.astro';
+---
+
+<Layout title="Contact Us">
+  <Hero 
+    title="Contact Us" 
+    subtitle="Get in touch with the Bentwood Creek HOA board"
+  />
+  
+  <div class="container mx-auto px-4 py-12">
+    <div class="max-w-3xl mx-auto">
+      <div class="mb-8 text-center">
+        <p class="text-lg text-gray-600">
+          Have a question, concern, or suggestion? Use the form below to get in touch with the HOA board.
+          We strive to respond to all inquiries within 48 hours.
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+          <div class="text-3xl text-primary mb-4">📧</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Email</h3>
+          <p class="text-gray-600">info@bentwoodcreek.org</p>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+          <div class="text-3xl text-primary mb-4">📱</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Emergency</h3>
+          <p class="text-gray-600">(555) 123-4567</p>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-md p-6 text-center">
+          <div class="text-3xl text-primary mb-4">📍</div>
+          <h3 class="font-semibold text-gray-800 mb-2">Address</h3>
+          <p class="text-gray-600">Bentwood Creek<br>Collierville, TN</p>
+        </div>
+      </div>
+      
+      <ContactForm />
+    </div>
+  </div>
+</Layout>

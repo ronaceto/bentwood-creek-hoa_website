@@ -1,0 +1,59 @@
+---
+import AdminLayout from '../../layouts/AdminLayout.astro';
+import { requireAuth } from '../../utils/auth';
+import { getAllDocuments } from '../../data/documents';
+
+// Check authentication
+const user = requireAuth(Astro.request);
+if (user instanceof Response) {
+  return user;
+}
+
+// Get document count
+const documents = getAllDocuments();
+const documentCount = documents.length;
+
+// Get category count
+const categories = new Set(documents.map(doc => doc.category));
+const categoryCount = categories.size;
+---
+
+<AdminLayout title="Admin Dashboard">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
+    <p class="text-gray-600">Welcome to the Bentwood Creek HOA administration panel.</p>
+  </div>
+  
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-2">Documents</h2>
+      <p class="text-3xl font-bold text-primary">{documentCount}</p>
+      <p class="text-gray-600 mt-2">Total documents</p>
+      <a href="/admin/documents" class="inline-block mt-4 text-primary hover:underline">Manage Documents →</a>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-2">Categories</h2>
+      <p class="text-3xl font-bold text-primary">{categoryCount}</p>
+      <p class="text-gray-600 mt-2">Document categories</p>
+      <a href="/admin/documents" class="inline-block mt-4 text-primary hover:underline">View Categories →</a>
+    </div>
+    
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-2">Quick Actions</h2>
+      <div class="space-y-2 mt-4">
+        <a href="/admin/documents/new" class="block px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark transition text-center">
+          Add New Document
+        </a>
+        <a href="/admin/announcements/new" class="block px-4 py-2 bg-gray-800 text-white rounded hover:bg-gray-700 transition text-center">
+          Create Announcement
+        </a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-xl font-semibold mb-4">Recent Activity</h2>
+    <p class="text-gray-600 italic">No recent activity to display.</p>
+  </div>
+</AdminLayout>

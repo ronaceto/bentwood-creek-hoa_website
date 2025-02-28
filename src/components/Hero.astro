@@ -1,0 +1,32 @@
+---
+interface Props {
+  title: string;
+  subtitle?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  overlayOpacity?: number;
+}
+
+const { 
+  title, 
+  subtitle, 
+  imageUrl = "/images/bentwood-entrance.jpg", 
+  imageAlt = "Bentwood Creek Neighborhood entrance",
+  overlayOpacity = 0.6
+} = Astro.props;
+---
+
+<div class="relative bg-gray-900 text-white">
+  <div class="absolute inset-0 overflow-hidden">
+    <img 
+      src={imageUrl} 
+      alt={imageAlt} 
+      class="w-full h-full object-cover"
+      style={`opacity: ${overlayOpacity}`}
+    />
+  </div>
+  <div class="relative container mx-auto px-4 py-16 md:py-24 flex flex-col items-center text-center">
+    <h1 class="text-3xl md:text-5xl font-bold mb-4">{title}</h1>
+    {subtitle && <p class="text-xl md:text-2xl max-w-2xl">{subtitle}</p>}
+  </div>
+</div>
